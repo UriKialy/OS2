@@ -1,19 +1,17 @@
 #include "q1.h"
 
-int validet(int check)
+int validet(int number)
 {
-    int arr[] = {};
-    for (int i = 0; i < 9; i++)
-    {
-        int num = check % 10;
-        if (arr[num] == 1)
-        {
-            return 0;
+    int arr[10] = {0}; 
+    while (number > 0) {
+        int digit = number % 10; // Get the last digit
+        if (arr[digit] == 1) {
+            return 0; // Return 0 if the digit is already present
         }
-        arr[num] = 1;
-        check = check / 10;
+        arr[digit] = 1; // Mark the digit as present
+        number /= 10; // Remove the last digit
     }
-    return 1;
+    return 1; 
 }
 
 int reverse(int num)
@@ -66,13 +64,38 @@ int isGameFinished(int board[3][3])
     }
     return 2; //not finished
 }
+void printBoard(int board[3][3]){
+
+     printf("the board is:\n");
+        for (int i = 0; i < 3; i++)
+        {
+            printf("[");
+            for (int j = 0; j < 3; j++)
+            {
+                if (board[i][j] == X)
+                {
+                    printf("X ");
+                }
+                else if (board[i][j] == O)
+                {
+                    printf("O ");
+                }
+                else
+                {
+                    printf("_ ");
+                }
+            }
+            printf("]\n");
+        }
+        return;
+}
 
 // the user is O and the computer is X
 void ttt(int strategy)
 {
     if (validet(strategy) == 0)
     {
-        printf("errorn");
+        printf("error\n");
         return;
     }
     strategy = reverse(strategy);
@@ -92,7 +115,7 @@ void ttt(int strategy)
     board[row][col] = X;
     while (1)
     {
-
+        printBoard(board);
         printf("please enter a number between 1-9\n");
         scanf("%d", &userChoise);
         if (userChoise < 1 || userChoise > 9 || board[(userChoise - 1) / 3][(userChoise - 1) % 3] != EMPTY)
@@ -148,14 +171,15 @@ void ttt(int strategy)
 
 int main(int argc, char *argv[])
 {
-    if (argc != 2)
+    if (argc <2 ||argc>3) 
     {
-        printf("argv should contain 2 args\n");
+        printf("argv should contain 2 args but containted %d \n",argc);
         return 1;
     }
     if(strlen(argv[1])!=9){
         printf("argv should contain 9 digits\n");
         return 1;
     }
+    ttt(atoi(argv[1]));
     return 0;
 }

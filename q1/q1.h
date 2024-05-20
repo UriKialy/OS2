@@ -9,3 +9,4 @@ void ttt(int strategy);
 int validet(int check);
 int reverse(int num);
 int isGameFinished(int board[3][3]);
+void printBoard(int board[3][3]);
