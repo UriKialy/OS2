@@ -151,6 +151,7 @@ void ttt(int strategy)
         if (board[row][col] != EMPTY)
         {
             board[row][col] = X;
+            continue;
         }
         else
         {
@@ -164,7 +165,8 @@ void ttt(int strategy)
                     board[row][col] = X;
                     break;
                 }
-            }
+            }continue;
+
         }
     }
 }
