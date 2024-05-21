@@ -88,7 +88,7 @@ int main(int argc, char *argv[]) {
         }
 
         // Player's move
-        std::cout << "Enter your move: ";
+        std::cout << "Enter your move: \n";
         while (true) {
             if (!(std::cin >> move) || move < 1 || move > 9 || board[move - 1] == 'X' || board[move - 1] == 'O') {
                 std::cout << "Invalid move. Enter a number between 1 and 9: ";

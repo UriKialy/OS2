@@ -26,21 +26,18 @@ std::vector<std::string> split(const std::string &str) {
 
 // Function to handle a client connection for input redirection
 void handle_client_input(int client_sock) {
-    std::cout << "Handling client input..." << std::endl;
     dup2(client_sock, STDIN_FILENO);
     close(client_sock);
 }
 
 // Function to handle a client connection for output redirection
 void handle_client_output(int client_sock) {
-    std::cout << "Handling client output..." << std::endl;
     dup2(client_sock, STDOUT_FILENO);
     close(client_sock);
 }
 
 // Function to start a TCP server
 int start_tcp_server(const std::string &port) {
-    std::cout << "Starting TCP server on port " << port << "..." << std::endl;
     int server_sock = socket(AF_INET, SOCK_STREAM, 0);
     if (server_sock < 0) {
         perror("Error creating socket");
@@ -76,7 +73,6 @@ int start_tcp_server(const std::string &port) {
 
 // Function to start a TCP client
 int start_tcp_client(const std::string &hostname, const std::string &port) {
-    std::cout << "Starting TCP client to " << hostname << " on port " << port << "..." << std::endl;
     int client_sock = socket(AF_INET, SOCK_STREAM, 0);
     if (client_sock < 0) {
         perror("Error creating socket");
@@ -106,7 +102,6 @@ int start_tcp_client(const std::string &hostname, const std::string &port) {
 
 void signal_handler(int signal) {
     if (signal == SIGINT) {
-        std::cout << "Received SIGINT signal. Terminating..." << std::endl;
         running = false;
     }
 }
@@ -165,7 +160,6 @@ int main(int argc, char *argv[]) {
         if (!input_redirect.empty()) {
             if (input_redirect.substr(0, 4) == "TCPS") {
                 int port = std::stoi(input_redirect.substr(4));
-                std::cout << "Attempting to accept TCP input on port " << port << "..." << std::endl;
                 int server_sock = start_tcp_server(std::to_string(port));
                 int client_sock = accept(server_sock, nullptr, nullptr);
                 if (client_sock < 0) {
@@ -182,7 +176,6 @@ int main(int argc, char *argv[]) {
         if (!output_redirect.empty()) {
             if (output_redirect.substr(0, 4) == "TCPS") {
                 int port = std::stoi(output_redirect.substr(4));
-                std::cout << "Attempting to accept TCP output on port " << port << "..." << std::endl;
                 int server_sock = start_tcp_server(std::to_string(port));
                 int client_sock = accept(server_sock, nullptr, nullptr);
                 if (client_sock < 0) {
@@ -195,7 +188,7 @@ int main(int argc, char *argv[]) {
             } else if (output_redirect.substr(0, 4) == "TCPC") {
                 std::string host_port = output_redirect.substr(4);
                 size_t comma_pos = host_port.find(',');
-                                if (comma_pos != std::string::npos) {
+                if (comma_pos != std::string::npos) {
                     std::string hostname = host_port.substr(0, comma_pos);
                     std::string port = host_port.substr(comma_pos + 1);
                     int client_sock = start_tcp_client(hostname, port);
@@ -207,6 +200,9 @@ int main(int argc, char *argv[]) {
             }
             // Additional output redirect implementations can be added here
         }
+
+        // Set the buffer to be line-buffered
+        setvbuf(stdout, nullptr, _IOLBF, BUFSIZ);
 
         // Executing the specified program with the given arguments
         execvp(args[0], args.data());
