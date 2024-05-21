@@ -1,19 +1,19 @@
-CC = gcc
-CFLAGS = -Wall -Wextra -g
+CXX = g++
+CXXFLAGS = -Wall -Wextra -g
 
-SRCS = q1.c
-OBJS = $(SRCS:.c=.o)
-TARGET = q1
-
-.PHONY: all clean
+SRCS = ttt.cpp 
+OBJS = $(SRCS:.cpp=.o)
+TARGET = ttt
 
 all: $(TARGET)
 
 $(TARGET): $(OBJS)
-	$(CC) $(CFLAGS) $^ -o $@
+	$(CXX) $(CXXFLAGS) $^ -o $@
 
-%.o: %.c
-	$(CC) $(CFLAGS) -c $< -o $@
+%.o: %.cpp
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+.PHONY: all clean
 
 clean:
 	rm -f $(OBJS) $(TARGET)
