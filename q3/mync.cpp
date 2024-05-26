@@ -168,11 +168,13 @@ int main(int argc, char *argv[]) {
                     close(server_sock);
                     return EXIT_FAILURE;
                 }
-                handle_client_input(client_sock);// handle the client input if error handle it
+                handle_client_input(client_sock);// handle the client input 
                 if (input_redirect == output_redirect) {
                     handle_client_output(client_sock);
+                    close(client_sock);
                 }
                 close(server_sock);
+                close(client_sock);
             }
             
         }
@@ -187,19 +189,22 @@ int main(int argc, char *argv[]) {
                 if (client_sock < 0) {
                     perror("Error accepting connection");
                     close(server_sock);
+                    close(client_sock);
                     return EXIT_FAILURE;
                 }
                 handle_client_output(client_sock);
                 close(server_sock);
+                close(client_sock);
             } else if (output_redirect.substr(0, 4) == "TCPC") {
                 string host_port = output_redirect.substr(4);
                 size_t comma_pos = host_port.find(',');
                 if (comma_pos != string::npos) {
                     string hostname = host_port.substr(0, comma_pos);
                     string port = host_port.substr(comma_pos + 1);
-                    cout << "starting tcp with " << hostname << " and port " << port << endl;
+                    //cout << "starting tcp with " << hostname << " and port " << port << endl;
                     int client_sock = start_tcp_client(hostname, port);
                     handle_client_output(client_sock);
+                    close(client_sock);
                 } else {
                     cerr << "Invalid TCPC format. Expected TCPC<hostname,port>" << endl;
                     return EXIT_FAILURE;
@@ -224,6 +229,7 @@ int main(int argc, char *argv[]) {
             kill(pid, SIGTERM);
             return EXIT_FAILURE;
         }
+        
     }
 
     return 0;
