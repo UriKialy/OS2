@@ -201,7 +201,6 @@ int main(int argc, char *argv[]) {
                 if (comma_pos != string::npos) {
                     string hostname = host_port.substr(0, comma_pos);
                     string port = host_port.substr(comma_pos + 1);
-                    //cout << "starting tcp with " << hostname << " and port " << port << endl;
                     int client_sock = start_tcp_client(hostname, port);
                     handle_client_output(client_sock);
                     close(client_sock);
