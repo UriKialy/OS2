@@ -358,7 +358,6 @@ int main(int argc, char *argv[])
             perror("Error forking process"); // If fork fails, print error and exit
             return EXIT_FAILURE;
         }
-
         if (pid == 0)
         { // Child process
             if (!input_redirect.empty())
@@ -499,6 +498,7 @@ int main(int argc, char *argv[])
                     handle_client_output(client_sock);
                     char buffer[1024];
                     ssize_t n;
+                    cout<<"entering the loop in datagram client"<<endl; 
                     while ((n = read(STDIN_FILENO, buffer, sizeof(buffer) - 1)) > 0)
                     {
                         buffer[n] = '\0';
