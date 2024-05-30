@@ -148,8 +148,11 @@ int start_udp_client(const string &hostname, const string &port) {
 }
 // Function to handle timeout
 void handle_timeout(int signal) {
-    cout << "Timeout reached. Killing processes..." << endl;
-    running = false;
+    if(signal == SIGALRM){
+        cout << "Timeout reached. Killing processes..." << endl;
+        running = false;
+    }
+    
 }
 
 void signal_handler(int signal) {// handle the signals
