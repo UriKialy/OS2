@@ -19,11 +19,11 @@ std::vector<std::string> split(const std::string &str)
 
 int main(int argc, char *argv[])
 {
-    
-    std::string argv1 =argv[1];
-    if ((!(argv1.compare(" -e"))) || argc>5)
+
+    std::string argv1 = argv[1];
+    if ((!(argv1.compare(" -e"))) || argc > 5)
     {
-        std::cerr << "argv[1] was"<< argv[1]<<" insted of -e"<< std::endl;
+        std::cerr << "argv[1] was" << argv[1] << " insted of -e" << std::endl;
         std::cerr << "Usage: " << argv[0] << " -e <program> [args] or too much arguemnts" << std::endl;
         return EXIT_FAILURE;
     }

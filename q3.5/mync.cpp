@@ -167,7 +167,7 @@ int main(int argc, char *argv[])
         string program_str = "./" + string(program);
 
         vector<string> split_program = split(program_str); // Split the program name and arguments
-        vector<char* > args;                               // Vector of char to store the arguments for execvp
+        vector<char *> args;                               // Vector of char to store the arguments for execvp
         for (const auto &arg : split_program)
         { // Convert the arguments to char* and store in the vector
             args.push_back(const_cast<char *>(arg.c_str()));
