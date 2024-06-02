@@ -20,4 +20,4 @@ void play_ttt(const std::string &strategy);
 //./mync -e "ttt 123456789" -i UDPS4050 -o TCPClocalhost,4455 == nc -u localhost 4050 & nc -l 4455
 // part 5: ./mync -e "ttt 123456789" -b TCPMUXS4050 == nc localhost 4050
 // part 6 ./mync -e "ttt 987654321" -i UDSSS/tmp/sock == nc -U /tmp/sock
-//./mync -e "ttt 987456321" -i UDSSD/tmp/sck == nc -U /tmp/sck
+//./mync -e "ttt 987456321" -i UDSSD/tmp/sck == nc -U -u /tmp/sck
