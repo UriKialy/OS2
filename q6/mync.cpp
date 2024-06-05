@@ -47,7 +47,7 @@ void handle_client_output(int client_sock)
 }
 
 // Function to start a TCP server
-int start_tcp_server(const string &port)
+int startTcpServer(const string &port)
 {
     int server_sock = socket(AF_INET, SOCK_STREAM, 0);
     if (server_sock < 0)
@@ -87,7 +87,7 @@ int start_tcp_server(const string &port)
 }
 
 // Function to start a TCP client
-int start_tcp_client(const string &hostname, const string &port)
+int startTcpClient(const string &hostname, const string &port)
 {
     int client_sock = socket(AF_INET, SOCK_STREAM, 0);
     if (client_sock < 0)
@@ -120,7 +120,7 @@ int start_tcp_client(const string &hostname, const string &port)
 }
 
 // Function to start a UDP server
-int start_udp_server(const string &port)
+int startUdpServer(const string &port)
 {
 
     int server_sock = socket(AF_INET, SOCK_DGRAM, 0);
@@ -146,7 +146,7 @@ int start_udp_server(const string &port)
 }
 
 // Function to start a UDP client
-int start_udp_client(const string &hostname, const string &port, struct sockaddr_in &server_addr)
+int startUdpClient(const string &hostname, const string &port, struct sockaddr_in &server_addr)
 {
     int client_sock = socket(AF_INET, SOCK_DGRAM, 0);
     if (client_sock < 0)
@@ -171,7 +171,7 @@ int start_udp_client(const string &hostname, const string &port, struct sockaddr
 }
 
 // Function to start a Unix Domain Socket server (DGRAM)
-int start_udssd_server(const string &path)
+int startUdssdServer(const string &path)
 {
     if (unlink(path.c_str()) < 0 && errno != ENOENT)
     {
@@ -200,7 +200,7 @@ int start_udssd_server(const string &path)
 }
 
 // Function to start a Unix Domain Socket client (DGRAM)
-int start_uds_client(const string &path)
+int startUdsClient(const string &path)
 {
     int client_sock = socket(AF_UNIX, SOCK_DGRAM, 0);
     if (client_sock < 0)
@@ -217,7 +217,7 @@ int start_uds_client(const string &path)
 }
 
 // Function to start a Unix Domain Socket server (STREAM)
-int start_udsss_server(const string &path)
+int startUdsssServer(const string &path)
 {
     if (unlink(path.c_str()) < 0 && errno != ENOENT)
     {
@@ -253,7 +253,7 @@ int start_udsss_server(const string &path)
 }
 
 // Function to start a Unix Domain Socket client (STREAM)
-int start_uds_client_stream(const string &path)
+int startUdsClientStream(const string &path)
 {
     int client_sock = socket(AF_UNIX, SOCK_STREAM, 0);
     if (client_sock < 0)
@@ -363,7 +363,7 @@ int main(int argc, char *argv[])
                 if (input_redirect.substr(0, 4) == "TCPS")
                 {
                     int port = stoi(input_redirect.substr(4));
-                    int server_sock = start_tcp_server(to_string(port));
+                    int server_sock = startTcpServer(to_string(port));
                     int client_sock = accept(server_sock, nullptr, nullptr);
                     if (client_sock < 0)
                     {
@@ -381,7 +381,7 @@ int main(int argc, char *argv[])
                 else if (input_redirect.substr(0, 4) == "UDPS")
                 {
                     int port = stoi(input_redirect.substr(4));
-                    int server_sock = start_udp_server(to_string(port));
+                    int server_sock = startUdpServer(to_string(port));
                     struct sockaddr_in client_addr = {};
                     socklen_t client_len = sizeof(client_addr);
                     char buffer[1024];
@@ -397,7 +397,7 @@ int main(int argc, char *argv[])
                 else if (input_redirect.substr(0, 5) == "UDSSD")
                 {
                     string path = input_redirect.substr(5);
-                    int server_sock = start_udssd_server(path);
+                    int server_sock = startUdssdServer(path);
                     struct sockaddr_un client_addr = {};
                     socklen_t client_len = sizeof(client_addr);
                     char buffer[1024];
@@ -413,7 +413,7 @@ int main(int argc, char *argv[])
                 else if (input_redirect.substr(0, 5) == "UDSSS")
                 {
                     string path = input_redirect.substr(5);
-                    int server_sock = start_udsss_server(path);
+                    int server_sock = startUdsssServer(path);
                     int client_sock = accept(server_sock, nullptr, nullptr);
                     if (client_sock < 0)
                     {
@@ -435,7 +435,7 @@ int main(int argc, char *argv[])
                 if (output_redirect.substr(0, 4) == "TCPS")
                 {
                     int port = stoi(output_redirect.substr(4));
-                    int server_sock = start_tcp_server(to_string(port));
+                    int server_sock = startTcpServer(to_string(port));
                     int client_sock = accept(server_sock, nullptr, nullptr);
                     if (client_sock < 0)
                     {
@@ -454,7 +454,7 @@ int main(int argc, char *argv[])
                     {
                         string hostname = host_port.substr(0, comma_pos);
                         string port = host_port.substr(comma_pos + 1);
-                        int client_sock = start_tcp_client(hostname, port);
+                        int client_sock = startTcpClient(hostname, port);
                         handle_client_output(client_sock);
                     }
                     else
@@ -472,7 +472,7 @@ int main(int argc, char *argv[])
                         string hostname = host_port.substr(0, comma_pos);
                         string port = host_port.substr(comma_pos + 1);
                         struct sockaddr_in server_addr;
-                        int client_sock = start_udp_client(hostname, port, server_addr);
+                        int client_sock = startUdpClient(hostname, port, server_addr);
                         handle_client_output(client_sock);
                         char buffer[1024];
                         ssize_t n;
@@ -492,7 +492,7 @@ int main(int argc, char *argv[])
                 else if (output_redirect.substr(0, 5) == "UDSCD")
                 {
                     string path = output_redirect.substr(5);
-                    int client_sock = start_uds_client(path);
+                    int client_sock = startUdsClient(path);
                     handle_client_output(client_sock);
                     char buffer[1024];
                     ssize_t n;
@@ -507,7 +507,7 @@ int main(int argc, char *argv[])
                 else if (output_redirect.substr(0, 5) == "UDSCS")
                 {
                     string path = output_redirect.substr(5);
-                    int client_sock = start_uds_client_stream(path);
+                    int client_sock = startUdsClientStream(path);
                     handle_client_output(client_sock);
                 }
             }
@@ -541,7 +541,7 @@ int main(int argc, char *argv[])
             if (input_redirect.substr(0, 4) == "TCPS")
             {
                 int port = stoi(input_redirect.substr(4));
-                int server_sock = start_tcp_server(to_string(port));
+                int server_sock = startTcpServer(to_string(port));
                 int client_sock = accept(server_sock, nullptr, nullptr);
                 if (client_sock < 0)
                 {
@@ -605,7 +605,7 @@ int main(int argc, char *argv[])
                 {
                     string hostname = host_port.substr(0, comma_pos);
                     string port = host_port.substr(comma_pos + 1);
-                    int client_sock = start_tcp_client(hostname, port);
+                    int client_sock = startTcpClient(hostname, port);
 
                     fd_set read_fds;
                     char buffer[1024];
